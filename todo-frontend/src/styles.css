@@ -1,16 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Image de fond uniquement pour le body */
+
 * {
-  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+  font-family: inherit;
 }
 
 /* src/styles.css */
-body {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 400; /* normal */
-  background: #f5f6f8;
-  margin: 20px;
-}
+
 h1, h2, h3 {
   font-weight: 600; /* titres plus gras */
 }
@@ -27,17 +25,19 @@ button {
 /* Sidebar générique */
 .sidebar {
   width: 220px;
-  background: #ececec;
-
+  background: #9a0a0a;
+  color: white;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin: 10px;
 }
 
 .sidebar h2 {
   font-size: 18px;
   margin-bottom: 10px;
+  color: white;
 }
 
 .sidebar ul {
@@ -52,10 +52,11 @@ button {
   transition: background 0.2s;
   display: flex;
   justify-content: space-between;
+  color: white;
 }
 
 .sidebar li:hover {
-  background: #f5f6f8;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .logout {
@@ -73,6 +74,9 @@ button {
   flex: 2;
   padding: 20px;
   padding-top: 0px;
+  background: rgba(255, 255, 255, 0.9);
+  margin: 10px;
+  border-radius: 10px;
 }
 
 .task-list h2 {
@@ -92,7 +96,7 @@ button {
 }
 
 .task-list li:hover {
-  background-color: #ececec;
+  background-color: #f5f5f5;
 }
 
 .task-list .done {
@@ -103,9 +107,10 @@ button {
 /* Détail générique */
 .task-detail {
   flex: 1;
-  background: #ececec;
+  background: rgba(236, 236, 236, 0.9);
   padding: 20px;
   border-radius: 10px;
+  margin: 10px;
 }
 
 .task-detail h2 {
@@ -154,7 +159,7 @@ button {
 
 /* Couleur différente selon le rôle */
 .role-badge.ADMIN {
-  background: #ff4d4d;
+  background: #a53232;
   color: white;
 }
 
@@ -162,3 +167,5 @@ button {
   background: #4caf50;
   color: white;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -1,0 +1,186 @@
+/* Styles généraux */
+:host {
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ffd700 0%, #daa520 25%, #b8860b 50%, #daa520 75%, #ffd700 100%);
+  background-size: cover;
+  background-attachment: fixed;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Conteneur principal */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  backdrop-filter: blur(10px);
+}
+
+/* Titres */
+h2 {
+  color: #b8860b;
+  text-align: center;
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #ffd700;
+  padding-bottom: 10px;
+}
+
+h3 {
+  color: #daa520;
+  font-size: 1.8em;
+  margin: 25px 0 15px 0;
+  padding-left: 10px;
+  border-left: 4px solid #ffd700;
+}
+
+/* Liste des utilisateurs */
+.users-section {
+  margin-bottom: 40px;
+}
+
+.users-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.users-list li {
+  margin-bottom: 0;
+}
+
+.user-button {
+  width: 100%;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #ffd700, #daa520);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+  text-align: left;
+}
+
+.user-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(218, 165, 32, 0.4);
+  background: linear-gradient(135deg, #ffdf00, #ffa500);
+}
+
+.user-button:active {
+  transform: translateY(0);
+}
+
+/* Section utilisateur sélectionné */
+.selected-user-section {
+  background: rgba(255, 248, 225, 0.8);
+  border-radius: 10px;
+  padding: 25px;
+  margin-top: 20px;
+  border: 2px solid #ffd700;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Liste des tâches */
+.tasks-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.tasks-list li {
+  background: white;
+  margin-bottom: 12px;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 5px solid #ffd700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.tasks-list li:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.task-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.task-description {
+  color: #666;
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
+
+.task-dueDate {
+  color: #b8860b;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+/* État des tâches complétées */
+.tasks-list li.completed {
+  opacity: 0.7;
+  background: #f8f8f8;
+  border-left-color: #28a745;
+}
+
+.tasks-list li.completed .task-title {
+  color: #28a745;
+}
+
+/* Animation de chargement */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.selected-user-section {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+    margin: 10px;
+  }
+  
+  h2 {
+    font-size: 2em;
+  }
+  
+  h3 {
+    font-size: 1.5em;
+  }
+  
+  .users-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-button {
+    padding: 12px 15px;
+    font-size: 1em;
+  }
+}

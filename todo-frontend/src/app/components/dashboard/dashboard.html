@@ -1,5 +1,5 @@
 <div class="app-container">
-
+  
   <!-- ======================= MENU GAUCHE ======================= -->
   <aside class="sidebar" [class.collapsed]="!isSidebarOpen">
 
@@ -10,50 +10,57 @@
     </div>
 
     <!-- Contenu du menu (uniquement si ouvert) -->
-    <ul *ngIf="isSidebarOpen">
-
-      <!-- ===== Section : Tâches ===== -->
-      <hr class="sidebar-separator" />
-      <h3 class="sidebar-title">TÂCHES</h3>
-      <li (click)="filter='all'; showUsers=false">
-        📋 Toutes <span class="badge">{{ totalTasks }}</span>
-      </li>
-      <li (click)="filter='today'; showUsers=false">
-        📅 Aujourd'hui <span class="badge">{{ todayTasks }}</span>
-      </li>
-      <li (click)="filter='done'; showUsers=false">
-        ✅ Terminées <span class="badge">{{ doneTasks }}</span>
-      </li>
-
-      <!-- ===== Section : Projets ===== -->
-      <hr class="sidebar-separator" />
-      <h3 class="sidebar-title">PROJETS</h3>
+    <div class="sidebar-content" *ngIf="isSidebarOpen">
       <ul>
-        <li *ngFor="let p of projects" (click)="filterByProject(p)">
-          <span class="project-color" [style.background]="getProjectColor(p)"></span>
-          {{ p }}
-          <span class="badge">{{ countTasksByProject(p) }}</span>
+
+        <!-- ===== Section : Tâches ===== -->
+        <hr class="sidebar-separator" />
+        <h3 class="sidebar-title">TÂCHES</h3>
+        <li (click)="filter='all'; showUsers=false">
+          📋 Toutes <span class="badge">{{ totalTasks }}</span>
         </li>
+        <li (click)="filter='today'; showUsers=false">
+          📅 Aujourd'hui <span class="badge">{{ todayTasks }}</span>
+        </li>
+        <li (click)="filter='done'; showUsers=false">
+          ✅ Terminées <span class="badge">{{ doneTasks }}</span>
+        </li>
+
+        <!-- ===== Section : Projets ===== -->
+        <hr class="sidebar-separator" />
+        <h3 class="sidebar-title">PROJETS</h3>
+        <ul>
+          <li *ngFor="let p of projects" (click)="filterByProject(p)">
+            <span class="project-color" [style.background]="getProjectColor(p)"></span>
+            {{ p }}
+            <span class="badge">{{ countTasksByProject(p) }}</span>
+          </li>
+        </ul>
+
+        <!-- Champ d'ajout d'un projet -->
+        <div class="add-project">
+          <input [(ngModel)]="newProject"
+                 placeholder="+ Nouveau projet..."
+                 (keyup.enter)="addProject()" />
+        </div>
+
+        <!-- ===== Section : Administration (admin only) ===== -->
+        <hr class="sidebar-separator" />
+        <h3 *ngIf="role === 'ADMIN'" class="sidebar-title">ADMINISTRATION</h3>
+        <li *ngIf="role === 'ADMIN'" (click)="toggleUsers()">
+          👥 Utilisateurs <span class="badge">{{ totalUsers }}</span>
+        </li>
+
       </ul>
+    </div>
 
-      <!-- Champ d’ajout d’un projet -->
-      <div class="add-project">
-        <input [(ngModel)]="newProject"
-               placeholder="+ Nouveau projet..."
-               (keyup.enter)="addProject()" />
-      </div>
-
-      <!-- ===== Section : Administration (admin only) ===== -->
-      <hr class="sidebar-separator" />
-      <h3 *ngIf="role === 'ADMIN'" class="sidebar-title">ADMINISTRATION</h3>
-      <li *ngIf="role === 'ADMIN'" (click)="toggleUsers()">
-        👥 Utilisateurs <span class="badge">{{ totalUsers }}</span>
-      </li>
-
-    </ul>
-
-    <!-- Bouton déconnexion -->
-    <button class="logout" (click)="logout()" *ngIf="isSidebarOpen">Déconnexion</button>
+    <!-- Footer avec bouton déconnexion TOUJOURS visible -->
+    <div class="sidebar-footer">
+      <button class="logout" (click)="logout()">
+        <span *ngIf="isSidebarOpen">Déconnexion</span>
+        <span *ngIf="!isSidebarOpen">🚪</span>
+      </button>
+    </div>
   </aside>
 
   <!-- ======================= COLONNE CENTRALE ======================= -->
@@ -72,7 +79,7 @@
         </ng-container>
       </h2>
 
-      <!-- Ajout d’une tâche (workflow en 2 étapes) -->
+      <!-- Ajout d'une tâche (workflow en 2 étapes) -->
       <div class="task-add">
         <!-- Étape 1 : titre -->
         <input *ngIf="step === 1"
@@ -100,7 +107,7 @@
     <ng-container *ngIf="showUsers">
       <h2>Utilisateurs</h2>
 
-      <!-- Formulaire d’ajout utilisateur -->
+      <!-- Formulaire d'ajout utilisateur -->
       <div class="user-form" *ngIf="showAddUser">
         <input [(ngModel)]="newUser.username" placeholder="Nom d'utilisateur" />
         <input [(ngModel)]="newUser.password" type="password" placeholder="Mot de passe" />
@@ -125,7 +132,7 @@
         </li>
       </ul>
 
-      <!-- Détail d’un utilisateur sélectionné -->
+      <!-- Détail d'un utilisateur sélectionné -->
       <div *ngIf="selectedUser" class="user-tasks-header">
         <h3>
           <span class="back-arrow" (click)="selectedUser=null; userTasks=[]">←</span>
@@ -135,7 +142,7 @@
           </span>
         </h3>
 
-        <!-- Tâches de cet utilisateur -->
+        <!--Tâches de cet utilisateur -->
         <ul>
           <li *ngFor="let t of userTasks" (click)="selectTask(t)">
             {{ t.title }} ({{ t.completed ? '✅' : '⏳' }})
@@ -147,74 +154,75 @@
   </main>
 
   <!-- ======================= COLONNE DROITE (Détail tâche) ======================= -->
-<section class="task-detail" *ngIf="selectedTask">
+  <section class="task-detail" *ngIf="selectedTask">
 
-  <!-- Bouton de fermeture -->
-  <span class="close-btn" (click)="closeTaskDetail()">&times;</span>
+    <!-- Bouton de fermeture -->
+    <span class="close-btn" (click)="closeTaskDetail()">&times;</span>
 
-  <!-- Formulaire édition tâche -->
-  <div class="task-edit-form">
-    <!-- Titre -->
-    <label class="title-edit">
-      <input [(ngModel)]="selectedTask.title" placeholder="Titre de la tâche" />
-    </label>
+    <!-- Formulaire édition tâche -->
+    <div class="task-edit-form">
+      <!-- Titre -->
+      <label class="title-edit">
+        <input [(ngModel)]="selectedTask.title" placeholder="Titre de la tâche" />
+      </label>
 
-    <!-- Description -->
-    <label>
-      <textarea [(ngModel)]="selectedTask.description" placeholder="Description"></textarea>
-    </label>
-  </div>
-
-  <!-- Date d’échéance -->
-  <div class="form-row">
-    <label>Date d'échéance</label>
-    <input type="date" [(ngModel)]="selectedTask.dueDate" />
-  </div>
-
-  <!-- Projet -->
-  <div class="form-row">
-    <label>Projet</label>
-    <select [(ngModel)]="selectedTask.project">
-      <option [ngValue]="null">Aucun</option>
-      <option *ngFor="let p of projects" [ngValue]="p">{{ p }}</option>
-    </select>
-  </div>
-
-  <!-- Statut -->
-  <div class="form-row">
-    <label>Statut</label>
-    <select [(ngModel)]="selectedTask.completed">
-      <option [ngValue]="false">En cours</option>
-      <option [ngValue]="true">Terminée</option>
-    </select>
-  </div>
-
-  <!-- Membres assignés -->
-  <div class="form-row assigned-users">
-    <label>Membres</label>
-    <div class="badges">
-      <span class="badge user" *ngFor="let u of selectedTask.assignedUsers">
-        {{ u.username }}
-        <span class="remove" (click)="removeUserFromTask(selectedTask.id, u.username)">✕</span>
-      </span>
+      <!-- Description -->
+      <label>
+        <textarea [(ngModel)]="selectedTask.description" placeholder="Description"></textarea>
+      </label>
     </div>
-  </div>
 
-  <!-- Recherche pour assigner un nouveau membre -->
-  <div class="assign-search">
-    <input type="text"
-           [(ngModel)]="userSearch"
-           placeholder="+ Ajouter un nouveau membre..." />
-    <ul *ngIf="filteredUsers.length > 0">
-      <li *ngFor="let u of filteredUsers" (click)="assignUserToTask(selectedTask.id, u.username)">
-        {{ u.username }}
-      </li>
-    </ul>
-  </div>
+    <!-- Date d'échéance -->
+    <div class="form-row">
+      <label>Date d'échéance</label>
+      <input type="date" [(ngModel)]="selectedTask.dueDate" />
+    </div>
 
-  <!-- Boutons d’action -->
-  <div class="task-actions">
-    <button (click)="deleteTask(selectedTask.id)">Supprimer</button>
-    <button (click)="updateTask()">💾 Sauvegarder</button>
-  </div>
-</section>
+    <!-- Projet -->
+    <div class="form-row">
+      <label>Projet</label>
+      <select [(ngModel)]="selectedTask.project">
+        <option [ngValue]="null">Aucun</option>
+        <option *ngFor="let p of projects" [ngValue]="p">{{ p }}</option>
+      </select>
+    </div>
+
+    <!-- Statut -->
+    <div class="form-row">
+      <label>Statut</label>
+      <select [(ngModel)]="selectedTask.completed">
+        <option [ngValue]="false">En cours</option>
+        <option [ngValue]="true">Terminée</option>
+      </select>
+    </div>
+
+    <!-- Membres assignés -->
+    <div class="form-row assigned-users">
+      <label>Membres</label>
+      <div class="badges">
+        <span class="badge user" *ngFor="let u of selectedTask.assignedUsers">
+          {{ u.username }}
+          <span class="remove" (click)="removeUserFromTask(selectedTask.id, u.username)">✕</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Recherche pour assigner un nouveau membre -->
+    <div class="assign-search">
+      <input type="text"
+             [(ngModel)]="userSearch"
+             placeholder="+ Ajouter un nouveau membre..." />
+      <ul *ngIf="filteredUsers.length > 0">
+        <li *ngFor="let u of filteredUsers" (click)="assignUserToTask(selectedTask.id, u.username)">
+          {{ u.username }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div class="task-actions">
+      <button class="btn-delete" (click)="selectedTask(selectedTask.id)">Supprimer</button>
+      <button class="btn-save" (click)="saveTask()">💾 Sauvegarder</button>
+    </div>
+  </section>
+</div>
